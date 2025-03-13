@@ -24,7 +24,7 @@ const textSearch = ref('')
 .search-container > input {
   width: 100%;
   height: 2rem;
-  padding: 0.5rem;
+  padding: .5rem 1rem .5rem 1rem;
   font-size: 1.5rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;

@@ -43,8 +43,7 @@ button > img {
   height: 3rem;
   display: flex;
   justify-content: space-between;
-  padding-top: 1rem;
-  padding-right: 2rem;
+  padding: 1rem 2rem 0 2rem;
 }
 
 .logo {
