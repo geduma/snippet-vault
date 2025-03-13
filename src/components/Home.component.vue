@@ -1,12 +1,9 @@
 <script setup>
-defineProps({
-  msg: String,
-})
-
+import SearchComponent from './Search.component.vue'
 </script>
 
 <template>
-  <h1 class="montserrat-alternates-light">{{ msg }}</h1>
+  <SearchComponent />
 </template>
 
 <style scoped>

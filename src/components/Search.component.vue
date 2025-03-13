@@ -6,7 +6,7 @@ const textSearch = ref('')
 
 <template>
   <div class="search-container">
-    <input type="text" name="textSearch" id="textSearch" v-model="textSearch" />
+    <input type="text" name="textSearch" id="textSearch" placeholder="Search" v-model="textSearch" />
     <div class="tags">
       <span class="vue">vue</span>
       <span class="javascript">javascript</span>
@@ -17,6 +17,10 @@ const textSearch = ref('')
 </template>
 
 <style scoped>
+.search-container {
+  width: 100%;
+}
+
 .search-container > input {
   width: 100%;
   height: 2rem;
