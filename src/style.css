@@ -7,16 +7,6 @@
   background-color: #242424;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  min-height: 100vh;
-}
-
-#app {
-  width: 100%;
-}
-
 button {
   border-radius: .5rem;
   background: none;

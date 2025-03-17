@@ -1,12 +1,32 @@
-<script setup>
-const login = () => {
-  console.log('login')
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Endpoints } from '../constants/endpoints.js'
+import { store } from '../store.ts'
+import type { User } from '../interfaces/user.interface.ts'
+
+const localUser = ref({ id: 0 } as User)
+const storageUser = localStorage.getItem('snippet-vault-session')
+if (storageUser) localUser.value = JSON.parse(atob(storageUser))
+
+const signin = () => {
+  const clientID = import.meta.env.VITE_GITHUB_CLIENT_ID
+  const redirectURI = Endpoints.GITHUB_REDIRECT_URL
+  window.location.href = `${Endpoints.GITHUB_AUTH_URL}?client_id=${clientID}&redirect_uri=${redirectURI}`
+}
+
+const signout = () => {
+  store.dispatch('cleanUser')
+  localUser.value = { id: 0 } as User
+  localStorage.clear()
 }
 
 const bug = () => {
   console.log('bug')
 }
 
+store.subscribe((store) => {
+  if (store.type === 'setUser') localUser.value = store.payload
+})
 </script>
 
 <template> 
@@ -20,9 +40,11 @@ const bug = () => {
         <img src="/images/bug.svg" alt="Bug logo" />
         Bugs
       </button>
-      <button type="button" v-on:click="login()">
-        <img src="/images/github.svg" alt="GitHub logo" />
+      <button type="button" v-on:click="signin()" v-if="localUser.id === 0">
         Sign in
+      </button>
+      <button type="button" v-on:click="signout()" v-if="localUser.id !== 0">
+        Sign out
       </button>
     </div>
   </div>
@@ -49,11 +71,11 @@ button > img {
 .logo {
   display: flex;
   align-items: center;
+  gap: .5rem;
 }
 
 .logo > img {
   height: 2rem;
-  padding: 0.5rem;
 }
 
 .buttons {

@@ -1,5 +1,10 @@
 <script setup>
 import HeaderComponent from './components/Header.component.vue'
+import { store } from './store';
+
+const user = localStorage.getItem('snippet-vault-session')
+if (user) store.dispatch('setUser', JSON.parse(atob(user)))
+
 </script>
 
 <template>
@@ -21,6 +26,6 @@ import HeaderComponent from './components/Header.component.vue'
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem;
+  padding: 2rem;
 }
 </style>
