@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { Endpoints } from '../constants/endpoints.js'
 import { store } from '../store.ts'
 import type { User } from '../interfaces/user.interface.ts'
