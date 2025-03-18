@@ -1,14 +1,17 @@
 <script setup>
-import HomeComponent from './components/Home.component.vue'
-import SearchComponent from './components/Search.component.vue'
+import HeaderComponent from './components/Header.component.vue'
+import { store } from './store';
+
+const user = localStorage.getItem('snippet-vault-session')
+if (user) store.dispatch('setUser', JSON.parse(atob(user)))
+
 </script>
 
 <template>
-  <div>
-    <img src="/images/snippet-vault-logo-icon.webp" class="logo vue" alt="Snippet Vault logo" />
+  <HeaderComponent />
+  <div class="container">
+    <RouterView />
   </div>
-  <HomeComponent msg="Snippet Vault" />
-  <SearchComponent />
 </template>
 
 <style scoped>
@@ -17,5 +20,12 @@ import SearchComponent from './components/Search.component.vue'
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
 }
 </style>
