@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { UserService }  from '../services/user.service.ts' 
+import { auth }  from '../services/auth.service.ts' 
 import { useRouter } from 'vue-router'
 import SpinnerComponent from './shared/Spinner.component.vue'
 
 const router = useRouter()
-const userService = new UserService()
-
 const urlParams = new URLSearchParams(window.location.search)
-userService.getUser(urlParams.get('code') || '')
+
+auth(urlParams.get('code') || '')
   .then(user => {
     localStorage.setItem('snippet-vault-session', btoa(JSON.stringify(user))) 
     router.push('/home')
