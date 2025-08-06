@@ -12,7 +12,7 @@ snippets.value = store.state.snippets
   <div class="snippets-list">
     <div class="snippet-container" v-for="snippet in snippets" :key="snippet.id">
       <div class="snippet-details">
-        <h2>{{ snippet.title }}</h2>
+        <RouterLink :to="`/${snippet.id}`">{{ snippet.title }}</RouterLink>
         <p>{{ snippet.description }}</p>
         <div class="tags">
           <span class="tag" v-for="tag in snippet.tags" :key="tag">{{ tag }}</span>
@@ -39,16 +39,20 @@ snippets.value = store.state.snippets
   padding-bottom: 1rem;
 }
 
-.snippet-container h2 {
+.snippet-details > a {
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #ccc;
   margin: 0;
 }
 
-.snippet-container p {
+.snippet-details > p {
   margin-top: 0.25rem;
   font-size: 12px;
 }
 
-.snippet-container h2:hover {
+.snippet-details > a:hover {
   cursor: pointer;
   text-decoration: underline;
 }
