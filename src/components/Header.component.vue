@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Endpoints } from '../constants/endpoints'
-import { store } from '../store.ts'
+import { store } from '../lib/store.ts'
 import type { User } from '../interfaces/user.interface'
 
 const localUser = ref({ id: 0 } as User)

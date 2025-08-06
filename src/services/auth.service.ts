@@ -1,8 +1,8 @@
 import { Endpoints } from '../constants/endpoints'
 import type { User } from '../interfaces/user.interface'
-import { store } from '../store'
+import { store } from '../lib/store'
 
-export const auth = (code: string) => {
+export const auth = (code: string): Promise<User> => {
   return new Promise<User>((resolve, reject) => {
     fetch(Endpoints.GET_USER_URL + '?code=' + code, {
       headers: {

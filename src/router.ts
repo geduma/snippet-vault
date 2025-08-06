@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AuthComponent from './components/Auth.component.vue'
 import HomeComponent from './components/Home.component.vue'
+import type { Router } from 'vue-router'
 
-export default () => {
+export default (): Router => {
   return createRouter({
     history: createWebHistory(),
     routes: [
