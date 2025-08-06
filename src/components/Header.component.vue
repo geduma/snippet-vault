@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Endpoints } from '../constants/endpoints.js'
-import { store } from '../store.ts'
-import type { User } from '../interfaces/user.interface.ts'
+import { Endpoints } from '../constants/endpoints'
+import { store } from '../lib/store.ts'
+import type { User } from '../interfaces/user.interface'
 
 const localUser = ref({ id: 0 } as User)
 const userImg = ref('/images/batman-profile.webp')
@@ -50,9 +50,11 @@ store.subscribe((store) => {
           Bugs
         </button>
         <button type="button" v-on:click="signin()" v-if="localUser.id === 0">
+          <img src="/images/github.svg" alt="GitHub logo" />
           Sign in
         </button>
         <button type="button" v-on:click="signout()" v-if="localUser.id !== 0">
+          <img src="/images/signout.svg" alt="Sign out logo" />
           Sign out
         </button>
       </div>

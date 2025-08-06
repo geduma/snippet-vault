@@ -1,9 +1,12 @@
 <script setup>
+import { store } from './lib/store';
 import HeaderComponent from './components/Header.component.vue'
-import { store } from './store';
+import * as snippetsService from './services/snippets.service'
 
 const user = localStorage.getItem('snippet-vault-session')
 if (user) store.dispatch('setUser', JSON.parse(atob(user)))
+
+snippetsService.getSnippetsMock()
 
 </script>
 
