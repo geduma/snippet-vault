@@ -45,6 +45,10 @@ store.subscribe((store) => {
     </div>
     <div class="right-content">
       <div class="buttons">
+        <button type="button" v-on:click="$router.push('/')" v-if="$router.currentRoute.value.path !== '/home'">
+          <img src="/images/back.svg" alt="Back logo" />
+          Back
+        </button>
         <button type="button" v-on:click="bug()">
           <img src="/images/bug.svg" alt="Bug logo" />
           Bugs
