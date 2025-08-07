@@ -1,68 +1,50 @@
 [
   {
-    "id": "1",
+    "_id": "1",
+    "group": 0,
     "title": "Basic Button",
     "description": "A simple button component with hover effect.",
-    "code": "<button class='btn'>Click Me</button>",
-    "tags": [
-      "button",
-      "ui",
-      "component"
-    ]
+    "snippetValue": "MSwyLDMsNA==%7CPGJ1dHRvbiBjbGFzcz0nYnRuJz5DbGljayBNZTwvYnV0dG9uPg==%7C%7C%7C",
+    "tags": "button,ui,component"
   },
   {
-    "id": "2",
+    "_id": "2",
+    "group": 0,
     "title": "Card Layout",
     "description": "A card layout with image and text.",
-    "code": "<div class='card'><img src='image.jpg' alt='Image'><p>Card description</p></div>",
-    "tags": [
-      "card",
-      "layout",
-      "ui"
-    ]
+    "snippetValue": "MSwyLDMsNA==%7CPGRpdiBjbGFzcz0nY2FyZCc+PGltZyBzcmM9J2ltYWdlLmpwZycgYWx0PSdJbWFnZSc+CiAgPHA+Q2FyZCBkZXNjcmlwdGlvbjwvcD4KPC9kaXY+%7C%7C%7C",
+    "tags": "card,layout,ui"
   },
   {
-    "id": "3",
+    "_id": "3",
+    "group": 0,
     "title": "Modal Dialog",
     "description": "A modal dialog box with close functionality.",
-    "code": "<div class='modal'><span class='close'>&times;</span><p>Modal content</p></div>",
-    "tags": [
-      "modal",
-      "dialog",
-      "ui"
-    ]
+    "snippetValue": "MSwyLDMsNA==%7CPGRpdiBjbGFzcz0nbW9kYWwnPjxzcGFuIGNsYXNzPSdjbG9zZSc+JnRpbWVzOzwvc3Bhbj4KICA8cD5Nb2RhbCBjb250ZW50PC9wPgo8L2Rpdj4=%7C%7C%7C",
+    "tags": "modal,dialog,ui"
   },
   {
-    "id": "4",
+    "_id": "4",
+    "group": 0,
     "title": "Navigation Bar",
     "description": "A responsive navigation bar with links.",
-    "code": "<nav class='navbar'><a href='#home'>Home</a><a href='#about'>About</a><a href='#contact'>Contact</a></nav>",
-    "tags": [
-      "navbar",
-      "navigation",
-      "ui"
-    ]
+    "snippetValue": "MSwyLDMsNA==%7CPG5hdiBjbGFzcz0nbmF2YmFyJz48YSBocmVmPScjaG9tZSc+SG9tZTwvYT48YSBocmVmPScjYWJvdXQnPkFib3V0PC9hPjxhIGhyZWY9JyNjb250YWN0Jz5Db250YWN0PC9hPjwvbmF2Pg==%7C%7C%7C",
+    "tags":"navbar,navigation,ui"
   },
   {
-    "id": "5",
+    "_id": "5",
+    "group": 0,
     "title": "Form Input",
     "description": "A styled form input field with label.",
-    "code": "<label for='name'>Name:</label><input type='text' id='name' name='name' class='input-field'>",
-    "tags": [
-      "form",
-      "input",
-      "ui"
-    ]
+    "snippetValue": "MSwyLDMsNA==%7CPGxhYmVsIGZvcj0nbmFtZSc+TmFtZTo8L2xhYmVsPjxpbnB1dCB0eXBlPSd0ZXh0JyBpZD0nbmFtZScgbmFtZT0nbmFtZScgY2xhc3M9J2lucHV0LWZpZWxkJz4=%7C%7C%7C",
+    "tags": "form,input,ui"
   },
   {
-    "id": "6",
+    "_id": "6",
+    "group": 0,
     "title": "Tooltip",
     "description": "A tooltip that appears on hover.",
-    "code": "<div class='tooltip'>Hover over me<span class='tooltiptext'>Tooltip text</span></div>",
-    "tags": [
-      "tooltip",
-      "hover",
-      "ui"
-    ]
+    "snippetValue": "MSwyLDMsNA==%7CPGRpdiBjbGFzcz0ndG9vbHRpcCc+SG92ZXIgb3ZlciBtZTxzcGFuIGNsYXNzPSd0b29sdGlwdGV4dCc+VG9vbHRpcCB0ZXh0PC9zcGFuPjwvZGl2Pg==%7C%7C%7C",
+    "tags": "tooltip,hover,ui"
   }
 ]

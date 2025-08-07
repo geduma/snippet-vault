@@ -4,7 +4,7 @@ import { store } from '../lib/store'
 
 export const auth = (code: string): Promise<User> => {
   return new Promise<User>((resolve, reject) => {
-    fetch(Endpoints.GET_USER_URL + '?code=' + code, {
+    fetch(Endpoints.API_URL + '/auth?code=' + code, {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

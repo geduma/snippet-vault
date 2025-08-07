@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Snippet } from '../interfaces/snippet.interface'
 import { store } from '../lib/store'
+import type { Snippet } from '../interfaces/snippet.interface'
+import * as snippetsService from '../services/snippets.service'
 
 const snippets = ref([] as Snippet[])
-snippets.value = store.state.snippets
 
+snippetsService.getAllSnippets()
+  .then(data => {
+    const res = data.map(snippet => {
+      return {
+        ...snippet,
+        _tags: snippet.tags.split(',').map(tag => tag.trim())
+      }
+    })
+    store.dispatch('setSnippets', res)
+    snippets.value = res
+  })
 </script>
 
 <template>
   <div class="snippets-list">
-    <div class="snippet-container" v-for="snippet in snippets" :key="snippet.id">
+    <div class="snippet-container" v-for="snippet in snippets" :key="snippet._id">
       <div class="snippet-details">
-        <RouterLink :to="`/${snippet.id}`">{{ snippet.title }}</RouterLink>
+        <RouterLink :to="`/${snippet._id}`">{{ snippet.title }}</RouterLink>
         <p>{{ snippet.description }}</p>
         <div class="tags">
-          <span class="tag" v-for="tag in snippet.tags" :key="tag">{{ tag }}</span>
+          <span class="tag" v-for="tag in snippet._tags" :key="tag">{{ tag }}</span>
         </div>
       </div>
       <div class="snippet-actions">
