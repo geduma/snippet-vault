@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { store } from '../lib/store'
 import type { Snippet } from '../interfaces/snippet.interface'
 import * as snippetsService from '../services/snippets.service'
+import SpinnerComponent from './shared/Spinner.component.vue'
 
 const loading = ref(true)
 const snippets = ref([] as Snippet[])
