@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import SpinnerComponent from './shared/Spinner.component.vue'
 import { Constants } from '../constants/constants'
 import type { Snippet } from '../interfaces/snippet.interface'
 import { store } from '../lib/store'
+import { ref } from 'vue'
 
+const loading = ref(true)
 const snippetId = window.location.pathname.split('/').pop()
 const snippet = store.state.snippets.find(x => x._id === snippetId) as Snippet
 
 if (store.state.snippets.length === 0) window.location.href = '/home'
 if (snippet === undefined) window.location.href = '/home'
+
+setTimeout(() => loading.value = false, 500);
 </script>
 
 <template>
+  <SpinnerComponent v-if="loading" />
   <div class="snippet-container">
     <h1>{{ snippet.title }}</h1>
     <p>{{ snippet.description }}</p>
@@ -50,7 +56,7 @@ h1, p {
 
 .editor {
   width: 100%;
-  height: 500px;
+  height: 600px;
   margin: 1rem -.5rem;
 }
 </style>
