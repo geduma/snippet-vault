@@ -1,7 +1,9 @@
 export interface Snippet {
-  id: number
+  _id: string
+  group: number
   title: string
   description: string
-  code: string
-  tags: string[]
+  tags: string
+  snippetValue: string
+  _tags: string[]
 }
