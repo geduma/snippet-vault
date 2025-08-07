@@ -4,6 +4,7 @@ import { store } from '../lib/store'
 import type { Snippet } from '../interfaces/snippet.interface'
 import * as snippetsService from '../services/snippets.service'
 
+const loading = ref(true)
 const snippets = ref([] as Snippet[])
 
 snippetsService.getAllSnippets()
@@ -16,10 +17,12 @@ snippetsService.getAllSnippets()
     })
     store.dispatch('setSnippets', res)
     snippets.value = res
+    loading.value = false
   })
 </script>
 
 <template>
+  <SpinnerComponent v-if="loading" />
   <div class="snippets-list">
     <div class="snippet-container" v-for="snippet in snippets" :key="snippet._id">
       <div class="snippet-details">

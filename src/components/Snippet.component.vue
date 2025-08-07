@@ -12,7 +12,7 @@ const snippet = store.state.snippets.find(x => x._id === snippetId) as Snippet
 if (store.state.snippets.length === 0) window.location.href = '/home'
 if (snippet === undefined) window.location.href = '/home'
 
-setTimeout(() => loading.value = false, 500);
+setTimeout(() => loading.value = false, 500)
 </script>
 
 <template>
