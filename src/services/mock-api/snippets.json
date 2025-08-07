@@ -5,7 +5,8 @@
     "title": "Basic Button",
     "description": "A simple button component with hover effect.",
     "snippetValue": "MSwyLDMsNA==%7CPGJ1dHRvbiBjbGFzcz0nYnRuJz5DbGljayBNZTwvYnV0dG9uPg==%7C%7C%7C",
-    "tags": "button,ui,component"
+    "tags": "button,ui,component",
+    "_tags": []
   },
   {
     "_id": "2",
@@ -13,7 +14,8 @@
     "title": "Card Layout",
     "description": "A card layout with image and text.",
     "snippetValue": "MSwyLDMsNA==%7CPGRpdiBjbGFzcz0nY2FyZCc+PGltZyBzcmM9J2ltYWdlLmpwZycgYWx0PSdJbWFnZSc+CiAgPHA+Q2FyZCBkZXNjcmlwdGlvbjwvcD4KPC9kaXY+%7C%7C%7C",
-    "tags": "card,layout,ui"
+    "tags": "card,layout,ui",
+    "_tags": []
   },
   {
     "_id": "3",
@@ -21,7 +23,8 @@
     "title": "Modal Dialog",
     "description": "A modal dialog box with close functionality.",
     "snippetValue": "MSwyLDMsNA==%7CPGRpdiBjbGFzcz0nbW9kYWwnPjxzcGFuIGNsYXNzPSdjbG9zZSc+JnRpbWVzOzwvc3Bhbj4KICA8cD5Nb2RhbCBjb250ZW50PC9wPgo8L2Rpdj4=%7C%7C%7C",
-    "tags": "modal,dialog,ui"
+    "tags": "modal,dialog,ui",
+    "_tags": []
   },
   {
     "_id": "4",
@@ -29,7 +32,8 @@
     "title": "Navigation Bar",
     "description": "A responsive navigation bar with links.",
     "snippetValue": "MSwyLDMsNA==%7CPG5hdiBjbGFzcz0nbmF2YmFyJz48YSBocmVmPScjaG9tZSc+SG9tZTwvYT48YSBocmVmPScjYWJvdXQnPkFib3V0PC9hPjxhIGhyZWY9JyNjb250YWN0Jz5Db250YWN0PC9hPjwvbmF2Pg==%7C%7C%7C",
-    "tags":"navbar,navigation,ui"
+    "tags":"navbar,navigation,ui",
+    "_tags": []
   },
   {
     "_id": "5",
@@ -37,7 +41,8 @@
     "title": "Form Input",
     "description": "A styled form input field with label.",
     "snippetValue": "MSwyLDMsNA==%7CPGxhYmVsIGZvcj0nbmFtZSc+TmFtZTo8L2xhYmVsPjxpbnB1dCB0eXBlPSd0ZXh0JyBpZD0nbmFtZScgbmFtZT0nbmFtZScgY2xhc3M9J2lucHV0LWZpZWxkJz4=%7C%7C%7C",
-    "tags": "form,input,ui"
+    "tags": "form,input,ui",
+    "_tags": []
   },
   {
     "_id": "6",
@@ -45,6 +50,7 @@
     "title": "Tooltip",
     "description": "A tooltip that appears on hover.",
     "snippetValue": "MSwyLDMsNA==%7CPGRpdiBjbGFzcz0ndG9vbHRpcCc+SG92ZXIgb3ZlciBtZTxzcGFuIGNsYXNzPSd0b29sdGlwdGV4dCc+VG9vbHRpcCB0ZXh0PC9zcGFuPjwvZGl2Pg==%7C%7C%7C",
-    "tags": "tooltip,hover,ui"
+    "tags": "tooltip,hover,ui",
+    "_tags": []
   }
 ]
