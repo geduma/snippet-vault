@@ -1,3 +1,35 @@
 export const Constants = {
-  EMBED_EDITOR: 'https://code.geduramc.com/embed'
+  EMBED_EDITOR: 'https://code.geduramc.com/embed',
+  TAGS_COLORS: [
+    { name: 'default', color: '#999999B3' },
+    { name: 'html', color: '#E44D26B3' },
+    { name: 'css', color: '#75e42681' },
+    { name: 'javascript', color: '#F7DF1EB3' },
+    { name: 'js', color: '#F7DF1EB3' },
+    { name: 'typescript', color: '#3178C6B3' },
+    { name: 'python', color: '#3776ABB3' },
+    { name: 'java', color: '#E76F00B3' },
+    { name: 'c', color: '#A8B9CCB3' },
+    { name: 'cpp', color: '#00599CB3' },
+    { name: 'csharp', color: '#239120B3' },
+    { name: 'php', color: '#777BB4B3' },
+    { name: 'ruby', color: '#CC342DB3' },
+    { name: 'go', color: '#00ADD8B3' },
+    { name: 'swift', color: '#FA7343B3' },
+    { name: 'kotlin', color: '#7F52FFB3' },
+    { name: 'rust', color: '#000000B3' },
+    { name: 'sql', color: '#336791B3' },
+    { name: 'shell', color: '#4EAA25B3' },
+    { name: 'json', color: '#292929B3' },
+    { name: 'yaml', color: '#CB171EB3' },
+    { name: 'markdown', color: '#083FA1B3' },
+    { name: 'docker', color: '#2496EDB3' },
+    { name: 'kubernetes', color: '#326CE5B3' },
+    { name: 'ui-components', color: '#3FB8AFB3' },
+    { name: 'ui-effects', color: '#FF6F61B3' },
+    { name: 'comments', color: '#6A737DB3' },
+    { name: 'template', color: '#5A9BD5B3' },
+    { name: 'responsive-design', color: '#4caf70b3' },
+    { name: 'xml', color: '#0060a937' }
+  ]
 }
