@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { store } from '../lib/store'
 
-const textSearch = ref('')
+const searchQuery = ref('')
+
+const filterSnippet = () => {
+  store.dispatch('setSnippets', store.state.allSnippets)
+
+  const snippets = 
+    store.state.snippets.filter(x => x.title.includes(searchQuery.value)
+    || x.description.includes(searchQuery.value)
+    || x._tags.some(tag => tag.name.includes(searchQuery.value))
+  )
+
+  store.dispatch('setSnippets', snippets)
+}
 </script>
 
 <template>
   <div class="search-container">
-    <input type="text" name="textSearch" id="textSearch" placeholder="Search" v-model="textSearch" />
+    <input type="text" name="textSearch" id="textSearch" placeholder="Search" v-model="searchQuery" v-on:input="filterSnippet" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { store } from '../lib/store'
 import type { Snippet } from '../interfaces/snippet.interface'
 import * as snippetsService from '../services/snippets.service'
@@ -22,9 +22,15 @@ snippetsService.getAllSnippets()
       }
     })
     store.dispatch('setSnippets', res)
+    store.dispatch('setAllSnippets', res)
     snippets.value = res
     loading.value = false
   })
+
+  watch(() => store.state.snippets, (newSnippets) => {
+      snippets.value = newSnippets
+    }
+  )
 </script>
 
 <template>
