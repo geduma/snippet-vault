@@ -7,10 +7,15 @@ const searchQuery = ref('')
 const filterSnippet = () => {
   store.dispatch('setSnippets', store.state.allSnippets)
 
-  const snippets = 
-    store.state.snippets.filter(x => x.title.includes(searchQuery.value)
-    || x.description.includes(searchQuery.value)
-    || x._tags.some(tag => tag.name.includes(searchQuery.value))
+  const snippets = store.state.snippets.map(x => {
+    return {
+      ...x,
+      title: x.title.toLowerCase(),
+      description: x.description.toLowerCase()
+    }
+  }).filter(x => x.title.includes(searchQuery.value.toLowerCase())
+    || x.description.includes(searchQuery.value.toLowerCase())
+    || x._tags.some(tag => tag.name.includes(searchQuery.value.toLowerCase()))
   )
 
   store.dispatch('setSnippets', snippets)
