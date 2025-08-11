@@ -5,5 +5,5 @@ export interface Snippet {
   description: string
   tags: string
   snippetValue: string
-  _tags: string[]
+  _tags: any[]
 }

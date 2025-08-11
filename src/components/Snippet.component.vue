@@ -15,7 +15,7 @@ if (snippet === undefined) window.location.href = '/home'
     <h1>{{ snippet.title }}</h1>
     <p>{{ snippet.description }}</p>
     <div class="tags">
-      <span class="tag" v-for="tag in snippet._tags" :key="tag">{{ tag }}</span>
+      <span class="tag" v-for="tag in snippet._tags" :key="tag" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
     </div>
     <div class="editor-container">
       <embed class="editor" :src="`${Constants.EMBED_EDITOR}/${snippet.snippetValue}`" type="text/html">
