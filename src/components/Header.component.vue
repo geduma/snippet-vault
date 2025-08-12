@@ -44,7 +44,7 @@ store.subscribe((store) => {
     </div>
     <div class="right-content">
       <div class="buttons">
-        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
+        <button type="button" class="disabled" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
           <img src="/images/create.svg" alt="Create logo" />
           Create
         </button>
