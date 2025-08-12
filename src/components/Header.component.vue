@@ -39,29 +39,29 @@ store.subscribe((store) => {
 <template> 
   <div class="header">
     <div class="logo">
-      <img src="/public/snippet-vault-logo-icon.webp" alt="Snippet Vault logo" />
+      <img src="/images/snippet-vault-logo-icon.webp" alt="Snippet Vault logo" />
       Snippet Vault
     </div>
     <div class="right-content">
       <div class="buttons">
         <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
-          <img src="/public/create.svg" alt="Create logo" />
+          <img src="/images/create.svg" alt="Create logo" />
           Create
         </button>
         <button type="button" v-on:click="$router.push('/')" v-if="$router.currentRoute.value.path !== '/home'">
-          <img src="/public/back.svg" alt="Back logo" />
+          <img src="/images/back.svg" alt="Back logo" />
           Back
         </button>
         <button type="button" v-on:click="bug()">
-          <img src="/public/bug.svg" alt="Bug logo" />
+          <img src="/images/bug.svg" alt="Bug logo" />
           Bugs
         </button>
         <button type="button" v-on:click="signin()" v-if="localUser.id === 0">
-          <img src="/public/github.svg" alt="GitHub logo" />
+          <img src="/images/github.svg" alt="GitHub logo" />
           Sign in
         </button>
         <button type="button" v-on:click="signout()" v-if="localUser.id !== 0">
-          <img src="/public/signout.svg" alt="Sign out logo" />
+          <img src="/images/signout.svg" alt="Sign out logo" />
           Sign out
         </button>
       </div>
