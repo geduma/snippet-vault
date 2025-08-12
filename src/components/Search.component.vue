@@ -18,7 +18,7 @@ const filterSnippet = () => {
     || x._tags.some(tag => tag.name.includes(searchQuery.value.toLowerCase()))
   )
 
-  store.dispatch('setSnippets', snippets)
+  store.dispatch('setSnippets', store.state.allSnippets.filter(x => snippets.map(y => y._id).includes(x._id)))
 }
 </script>
 

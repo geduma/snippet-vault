@@ -3,6 +3,7 @@ import AuthComponent from './components/Auth.component.vue'
 import HomeComponent from './components/Home.component.vue'
 import type { Router } from 'vue-router'
 import SnippetComponent from './components/Snippet.component.vue'
+import NewSnippetComponent from './components/NewSnippet.component.vue'
 
 export default (): Router => {
   return createRouter({
@@ -27,6 +28,11 @@ export default (): Router => {
         path: '/:snippetId',
         name: 'Snippet',
         component: SnippetComponent
+      },
+      {
+        path: '/new',
+        name: 'NewSnippet',
+        component: NewSnippetComponent
       }
     ]
   })
