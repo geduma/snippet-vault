@@ -44,13 +44,13 @@ store.subscribe((store) => {
     </div>
     <div class="right-content">
       <div class="buttons">
-        <button type="button" class="disabled" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
-          <img src="/images/create.svg" alt="Create logo" />
-          Create
-        </button>
         <button type="button" v-on:click="$router.push('/')" v-if="$router.currentRoute.value.path !== '/home'">
           <img src="/images/back.svg" alt="Back logo" />
           Back
+        </button>
+        <button type="button" class="disabled" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
+          <img src="/images/create.svg" alt="Create logo" />
+          Create
         </button>
         <button type="button" v-on:click="bug()">
           <img src="/images/bug.svg" alt="Bug logo" />
