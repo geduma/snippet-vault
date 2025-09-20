@@ -17,7 +17,7 @@ if (user) store.dispatch('setUser', JSON.parse(atob(user)))
 
 <style scoped>
 .snippets {
-  margin-top: 4rem;
+  margin-top: 2rem;
   width: 90%;
 }
 </style>

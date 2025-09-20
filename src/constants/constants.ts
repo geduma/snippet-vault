@@ -1,5 +1,6 @@
 export const Constants = {
   EMBED_EDITOR: 'https://code.geduramc.com/embed',
+  BUG_REPORT_URL: 'https://github.com/geduma/snippet-vault/issues/new/choose',
   TAGS_COLORS: [
     { name: 'default', color: '#999999B3' },
     { name: 'html', color: '#E44D26B3' },

@@ -33,11 +33,11 @@ const filterSnippet = () => {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 4rem;
+  padding-top: 2rem;
 }
 
 .search-container > input {
-  width: 80%;
+  width: 90%;
   height: 2rem;
   padding: .5rem 1rem .5rem 1rem;
   font-size: 1.5rem;
