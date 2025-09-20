@@ -1,0 +1,22 @@
+<script setup lang="ts">
+import { auth }  from '../services/auth.service.ts' 
+import { useRouter } from 'vue-router'
+import SpinnerComponent from './shared/Spinner.component.vue'
+
+const router = useRouter()
+const urlParams = new URLSearchParams(window.location.search)
+
+auth(urlParams.get('code') || '')
+  .then(user => {
+    localStorage.setItem('snippet-vault-session', btoa(JSON.stringify(user))) 
+    router.push('/home')
+  })
+
+</script>
+
+<template>
+  <SpinnerComponent :enabled="true" />
+</template>
+
+<style scoped>
+</style>
