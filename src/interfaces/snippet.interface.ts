@@ -1,6 +1,6 @@
 export interface Snippet {
   _id: string
-  group: number
+  group: string
   title: string
   description: string
   tags: string

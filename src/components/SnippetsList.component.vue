@@ -38,14 +38,11 @@ snippetsService.getAllSnippets()
   <div class="snippets-list">
     <div class="snippet-container" v-for="snippet in snippets" :key="snippet._id">
       <div class="snippet-details">
-        <RouterLink :to="`/${snippet._id}`">{{ snippet.title }}</RouterLink>
+        <RouterLink :to="`/${snippet._id}`" :title="snippet.title">{{ snippet.title }}</RouterLink>
         <p>{{ snippet.description }}</p>
         <div class="tags">
           <span class="tag" v-for="tag in snippet._tags" :key="tag" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
         </div>
-      </div>
-      <div class="snippet-actions">
-        ...
       </div>
     </div>
   </div>
@@ -53,16 +50,19 @@ snippetsService.getAllSnippets()
 
 <style scoped>
 .snippets-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: .5rem;
 }
 
 .snippet-container {
-  display: grid;
-  grid-template-columns: 70% 30%;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  height: 140px;
 }
 
 .snippet-details > a {
@@ -100,5 +100,27 @@ snippetsService.getAllSnippets()
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+a {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .snippets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 </style>

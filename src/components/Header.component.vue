@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { Endpoints } from '../constants/endpoints'
 import { store } from '../lib/store.ts'
 import type { User } from '../interfaces/user.interface'
+import { Constants } from '../constants/constants.ts'
 
 const localUser = ref({ id: 0 } as User)
 const userImg = ref('/batman-profile.webp')
@@ -28,7 +29,7 @@ const signout = () => {
 }
 
 const bug = () => {
-  console.log('bug')
+  window.open(Constants.BUG_REPORT_URL, '_blank')
 }
 
 store.subscribe((store) => {
