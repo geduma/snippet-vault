@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useUserStore } from '../stores/user.store'
-import { useSnippetsStore } from '../stores/snippets.store'
-import type { User } from '../interfaces/user.interface'
-import type { Snippet } from '../interfaces/snippet.interface'
+import { useUserStore } from '../src/stores/user.store'
+import { useSnippetsStore } from '../src/stores/snippets.store'
+import type { User } from '../src/interfaces/user.interface'
+import type { Snippet } from '../src/interfaces/snippet.interface'
 
 describe('UserStore', () => {
   beforeEach(() => {

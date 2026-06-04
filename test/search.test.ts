@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useSnippetsStore } from '../stores/snippets.store'
-import type { Snippet } from '../interfaces/snippet.interface'
+import { useSnippetsStore } from '../src/stores/snippets.store'
+import type { Snippet } from '../src/interfaces/snippet.interface'
 
 const mockSnippets: Snippet[] = [
   { _id: '1', group: '0', title: 'Basic Button', description: 'A simple button component', tags: 'button,ui', snippetValue: 'abc', _tags: [{ name: 'button', color: '#999' }, { name: 'ui', color: '#999' }] },
