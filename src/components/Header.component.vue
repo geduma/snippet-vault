@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Endpoints } from '../constants/endpoints'
-import { store } from '../lib/store.ts'
 import type { User } from '../interfaces/user.interface'
-import { Constants } from '../constants/constants.ts'
+import { Constants } from '../constants/constants'
+import { useUserStore } from '../stores/user.store'
+
+const userStore = useUserStore()
 
 const localUser = ref({ id: 0 } as User)
 const userImg = ref('/batman-profile.webp')
@@ -23,7 +25,7 @@ const signin = () => {
 }
 
 const signout = () => {
-  store.dispatch('cleanUser')
+  userStore.cleanUser()
   localUser.value = { id: 0 } as User
   localStorage.clear()
 }
@@ -32,8 +34,8 @@ const bug = () => {
   window.open(Constants.BUG_REPORT_URL, '_blank')
 }
 
-store.subscribe((store) => {
-  if (store.type === 'setUser') setUserData(store.payload)
+userStore.$subscribe((_mutation, state) => {
+  if (state.user.id) setUserData(state.user)
 })
 </script>
 
@@ -49,7 +51,7 @@ store.subscribe((store) => {
           <img src="/images/back.svg" alt="Back logo" />
           Back
         </button>
-        <button type="button" class="disabled" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
+        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
           <img src="/images/create.svg" alt="Create logo" />
           Create
         </button>

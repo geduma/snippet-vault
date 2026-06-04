@@ -1,14 +1,5 @@
 import { Endpoints } from '../constants/endpoints'
 import type { Snippet } from '../interfaces/snippet.interface'
-import { store } from '../lib/store'
-import snippetsMock from './mock-api/snippets.json'
-
-const getSnippetsMock = (): Promise<Snippet[]> => {
-  return new Promise<Snippet[]>((resolve) => {
-    store.dispatch('setSnippets', snippetsMock)
-    resolve(snippetsMock)
-  })
-}
 
 const getAllSnippets = (): Promise<Snippet[]> => {
   return new Promise<Snippet[]>((resolve, reject) => {
@@ -26,6 +17,5 @@ const getAllSnippets = (): Promise<Snippet[]> => {
 }
 
 export {
-  getSnippetsMock,
   getAllSnippets
 }

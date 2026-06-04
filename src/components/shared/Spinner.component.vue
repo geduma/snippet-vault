@@ -1,5 +1,5 @@
 <script setup>
-const enabled = defineProps({ enabled: Boolean })
+defineProps({ enabled: Boolean })
 </script>
 
 <template>
