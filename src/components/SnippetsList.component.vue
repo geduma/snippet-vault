@@ -62,8 +62,8 @@ snippetsService.getAllSnippets()
     snippets.value = res
     loading.value = false
   })
-  .catch(() => {
-    error.value = 'Failed to load snippets. Please try again later.'
+  .catch((err: { message: string }) => {
+    error.value = err.message || 'Failed to load snippets. Please try again later.'
     loading.value = false
   })
 

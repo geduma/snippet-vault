@@ -1,6 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { mount } from '@vue/test-utils'
 import { setActivePinia, createPinia } from 'pinia'
 import { useSnippetsStore } from '../src/stores/snippets.store'
+import SearchComponent from '../src/components/Search.component.vue'
 import type { Snippet } from '../src/interfaces/snippet.interface'
 
 const mockSnippets: Snippet[] = [
@@ -67,5 +69,49 @@ describe('SnippetsStore search', () => {
       || s._tags.some(tag => tag.name.includes(query.toLowerCase()))
     )
     expect(filtered).toHaveLength(0)
+  })
+})
+
+describe('SearchComponent debounce', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    const store = useSnippetsStore()
+    store.setAllSnippets(mockSnippets)
+    store.setSnippets(mockSnippets)
+    vi.useFakeTimers()
+  })
+
+  it('does not filter before 300ms debounce timeout', async () => {
+    const wrapper = mount(SearchComponent)
+    const store = useSnippetsStore()
+    const input = wrapper.find('input')
+
+    await input.setValue('button')
+
+    expect(store.snippets).toHaveLength(3)
+
+    vi.advanceTimersByTime(300)
+
+    expect(store.snippets).toHaveLength(1)
+    expect(store.snippets[0]._id).toBe('1')
+  })
+
+  it('resets debounce on rapid typing', async () => {
+    const wrapper = mount(SearchComponent)
+    const store = useSnippetsStore()
+    const input = wrapper.find('input')
+
+    await input.setValue('button')
+    vi.advanceTimersByTime(200)
+
+    await input.setValue('card')
+    vi.advanceTimersByTime(200)
+
+    expect(store.snippets).toHaveLength(3)
+
+    vi.advanceTimersByTime(100)
+
+    expect(store.snippets).toHaveLength(1)
+    expect(store.snippets[0]._id).toBe('2')
   })
 })

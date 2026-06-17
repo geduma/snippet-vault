@@ -1,10 +1,9 @@
 import { Endpoints } from '../constants/endpoints'
 import type { User } from '../interfaces/user.interface'
-import { pinia } from '../main'
 import { useUserStore } from '../stores/user.store'
 
 export const auth = (code: string): Promise<User> => {
-  const userStore = useUserStore(pinia)
+  const userStore = useUserStore()
 
   return new Promise<User>((resolve, reject) => {
     fetch(Endpoints.API_URL + '/auth?code=' + code, {

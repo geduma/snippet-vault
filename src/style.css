@@ -23,11 +23,6 @@ button:active {
   opacity: 0.6;
 }
 
-.disabled {
-  opacity: .5;
-  pointer-events: none;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
