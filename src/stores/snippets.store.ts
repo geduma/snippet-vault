@@ -4,7 +4,8 @@ import type { Snippet } from '../interfaces/snippet.interface'
 export const useSnippetsStore = defineStore('snippets', {
   state: () => ({
     snippets: [] as Snippet[],
-    allSnippets: [] as Snippet[]
+    allSnippets: [] as Snippet[],
+    loading: true
   }),
   actions: {
     setSnippets (_snippets: Snippet[]) {
@@ -18,6 +19,9 @@ export const useSnippetsStore = defineStore('snippets', {
     },
     cleanAllSnippets () {
       this.allSnippets = []
+    },
+    setLoading (_loading: boolean) {
+      this.loading = _loading
     }
   }
 })

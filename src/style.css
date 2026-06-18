@@ -14,13 +14,18 @@ button {
   border: .1px solid #afafaf;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   opacity: 0.8;
   scale: 1.1;
 }
 
-button:active {
+button:active:not(:disabled) {
   opacity: 0.6;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: default;
 }
 
 @media (prefers-color-scheme: light) {

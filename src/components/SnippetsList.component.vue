@@ -9,9 +9,8 @@ import SpinnerComponent from './shared/Spinner.component.vue'
 import { Constants } from '../constants/constants'
 
 const snippetsStore = useSnippetsStore()
-const { snippets: storeSnippets } = storeToRefs(snippetsStore)
+const { snippets: storeSnippets, loading } = storeToRefs(snippetsStore)
 
-const loading = ref(true)
 const error = ref('')
 const snippets = ref<Snippet[]>([])
 const parentRef = ref<Element | null>(null)
@@ -59,12 +58,12 @@ snippetsService.getAllSnippets()
     })
     snippetsStore.setSnippets(res)
     snippetsStore.setAllSnippets(res)
+    snippetsStore.setLoading(false)
     snippets.value = res
-    loading.value = false
   })
   .catch((err: { message: string }) => {
     error.value = err.message || 'Failed to load snippets. Please try again later.'
-    loading.value = false
+    snippetsStore.setLoading(false)
   })
 
   watch(storeSnippets, (newSnippets) => {

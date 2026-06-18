@@ -4,8 +4,12 @@ import { Endpoints } from '../constants/endpoints'
 import type { User } from '../interfaces/user.interface'
 import { Constants } from '../constants/constants'
 import { useUserStore } from '../stores/user.store'
+import { useSnippetsStore } from '../stores/snippets.store'
+import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
+const snippetsStore = useSnippetsStore()
+const { loading } = storeToRefs(snippetsStore)
 
 const localUser = ref({ id: 0 } as User)
 const userImg = ref('/batman-profile.webp')
@@ -47,23 +51,23 @@ userStore.$subscribe((_mutation, state) => {
     </div>
     <div class="right-content">
       <div class="buttons">
-        <button type="button" v-on:click="$router.push('/')" v-if="$router.currentRoute.value.path !== '/home'">
+        <button type="button" v-on:click="$router.push('/')" v-if="$router.currentRoute.value.path !== '/home'" :disabled="loading" :class="{ loading }">
           <img src="/images/back.svg" alt="Back logo" />
           Back
         </button>
-        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled>
+        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" disabled :class="{ loading }">
           <img src="/images/create.svg" alt="Create logo" />
           Create
         </button>
-        <button type="button" v-on:click="bug()">
+        <button type="button" v-on:click="bug()" :disabled="loading" :class="{ loading }">
           <img src="/images/bug.svg" alt="Bug logo" />
           Bugs
         </button>
-        <button type="button" v-on:click="signin()" v-if="localUser.id === 0">
+        <button type="button" v-on:click="signin()" v-if="localUser.id === 0" :disabled="loading" :class="{ loading }">
           <img src="/images/github.svg" alt="GitHub logo" />
           Sign in
         </button>
-        <button type="button" v-on:click="signout()" v-if="localUser.id !== 0">
+        <button type="button" v-on:click="signout()" v-if="localUser.id !== 0" :disabled="loading" :class="{ loading }">
           <img src="/images/signout.svg" alt="Sign out logo" />
           Sign out
         </button>
@@ -118,6 +122,15 @@ button > img {
   display: flex;
   align-items: center;
   gap: .5rem;
+}
+
+button.loading {
+  animation: btn-pulse 1s ease-in-out infinite;
+}
+
+@keyframes btn-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
