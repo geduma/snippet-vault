@@ -1,11 +1,12 @@
 import { Endpoints } from '../constants/endpoints'
 import type { Snippet } from '../interfaces/snippet.interface'
 
+const base = Endpoints.API_URL + Endpoints.SNIPPET_VAULT_URL
+
 const getAllSnippets = (): Promise<Snippet[]> => {
-  return fetch(Endpoints.API_URL + '/all', {
+  return fetch(base + '/all', {
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
       Accept: 'application/json'
     }
   })
@@ -20,11 +21,10 @@ const getAllSnippets = (): Promise<Snippet[]> => {
 }
 
 const createSnippet = (data: { group: string; title: string; description: string; tags: string; snippetValue: string; owner: string }): Promise<Snippet> => {
-  return fetch(Endpoints.API_URL, {
+  return fetch(base, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
       Accept: 'application/json'
     },
     body: JSON.stringify(data)
@@ -40,11 +40,10 @@ const createSnippet = (data: { group: string; title: string; description: string
 }
 
 const deleteSnippet = (id: string): Promise<void> => {
-  return fetch(Endpoints.API_URL + '/' + id, {
+  return fetch(base + '/' + id, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
       Accept: 'application/json'
     }
   })
