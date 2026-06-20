@@ -5,5 +5,6 @@ export interface Snippet {
   description: string
   tags: string
   snippetValue: string
-  _tags: any[]
+  owner: string
+  _tags: Array<{ name: string; color: string }>
 }
