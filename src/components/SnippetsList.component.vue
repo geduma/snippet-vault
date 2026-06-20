@@ -52,7 +52,7 @@ snippetsService.getAllSnippets()
         ...snippet,
         _tags: tags.map(tag => ({
           name: tag,
-          color: Constants.TAGS_COLORS.find(x => x.name === tag)?.color || Constants.TAGS_COLORS.find(x => x.name === 'default')?.color
+          color: Constants.TAGS_COLORS.find(x => x.name === tag)?.color ?? '#999999B3'
         }))
       }
     })
@@ -99,7 +99,7 @@ snippetsService.getAllSnippets()
             <RouterLink :to="`/${snippet._id}`" :title="snippet.title">{{ snippet.title }}</RouterLink>
             <p :title="snippet.description">{{ truncate(snippet.description) }}</p>
             <div class="tags">
-              <span class="tag" v-for="tag in snippet._tags" :key="tag" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
+              <span class="tag" v-for="tag in snippet._tags" :key="tag.name" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
             </div>
           </div>
         </div>

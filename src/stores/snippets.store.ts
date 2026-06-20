@@ -22,6 +22,10 @@ export const useSnippetsStore = defineStore('snippets', {
     },
     setLoading (_loading: boolean) {
       this.loading = _loading
+    },
+    removeSnippet (_id: string) {
+      this.snippets = this.snippets.filter(s => s._id !== _id)
+      this.allSnippets = this.allSnippets.filter(s => s._id !== _id)
     }
   }
 })

@@ -4,17 +4,21 @@ import { useRoute, useRouter } from 'vue-router'
 import { Constants } from '../constants/constants'
 import type { Snippet } from '../interfaces/snippet.interface'
 import { useSnippetsStore } from '../stores/snippets.store'
+import { useUserStore } from '../stores/user.store'
 import { storeToRefs } from 'pinia'
-import { getAllSnippets } from '../services/snippets.service'
+import { getAllSnippets, deleteSnippet } from '../services/snippets.service'
 
 const snippetsStore = useSnippetsStore()
+const userStore = useUserStore()
 const { snippets, allSnippets } = storeToRefs(snippetsStore)
+const { user } = storeToRefs(userStore)
 import SpinnerComponent from './shared/Spinner.component.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const loading = ref(true)
+const deleting = ref(false)
 const snippet = ref<Snippet | null>(null)
 const snippetId = route.params.snippetId as string
 
@@ -24,7 +28,7 @@ const enrichSnippet = (s: Snippet): Snippet => {
     ...s,
     _tags: tags.map(tag => ({
       name: tag,
-      color: Constants.TAGS_COLORS.find(x => x.name === tag)?.color || Constants.TAGS_COLORS.find(x => x.name === 'default')?.color
+      color: Constants.TAGS_COLORS.find(x => x.name === tag)?.color ?? '#999999B3'
     }))
   }
 }
@@ -53,16 +57,39 @@ const loadSnippet = async () => {
   }
 }
 
+const handleDelete = async () => {
+  if (!snippet.value) return
+  deleting.value = true
+  try {
+    await deleteSnippet(snippet.value._id)
+    snippetsStore.removeSnippet(snippet.value._id)
+    router.push('/home')
+  } catch {
+    deleting.value = false
+  }
+}
+
 loadSnippet()
 </script>
 
 <template>
   <SpinnerComponent v-if="loading" />
   <div class="snippet-container" v-if="snippet">
-    <h1>{{ snippet.title }}</h1>
+    <div class="snippet-header">
+      <h1>{{ snippet.title }}</h1>
+      <button
+        type="button"
+        class="delete-btn"
+        v-if="user.login && snippet.owner === user.login"
+        @click="handleDelete"
+        :disabled="deleting"
+      >
+        Eliminar
+      </button>
+    </div>
     <p>{{ snippet.description }}</p>
     <div class="tags">
-      <span class="tag" v-for="tag in snippet._tags" :key="tag" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
+      <span class="tag" v-for="tag in snippet._tags" :key="tag.name" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
     </div>
     <div class="editor-container">
       <embed class="editor" :src="`${Constants.EMBED_EDITOR}/${snippet.snippetValue}`" type="text/html">
@@ -80,6 +107,32 @@ h1, p {
   display: flex;
   flex-direction: column;
   gap: .5rem;
+}
+
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+.delete-btn:hover:not(:disabled) {
+  opacity: 0.8;
+  scale: 1.05;
+}
+
+.delete-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .tags {
