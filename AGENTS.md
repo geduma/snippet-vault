@@ -17,13 +17,13 @@ SPA for browsing, searching, and viewing code snippets. Built with Vue 3 + TypeS
 | Language | TypeScript ~5.7 |
 | Build | Vite ^6.2 |
 | Routing | vue-router ^4.5 (HTML5 history) |
-| State | Vuex ^4.1 |
+| State | Pinia ^3.0 |
 | Reactive | RxJS ^7.8 |
 | Linting | ts-standard ^12.0 (Standard TS style) |
 | Type check | vue-tsc ^2.2 |
 | Hosting | Azure Static Web Apps |
 | CI/CD | GitHub Actions (push → main) |
-| Auth | GitHub OAuth via `better-auth` |
+| Auth | Geduma Auth (OAuth centralizado: GitHub) |
 | Fonts | Montserrat Alternates (Google Fonts) |
 
 ---
@@ -37,30 +37,29 @@ snippet-vault/
 ├── tsconfig.json                       # Strict TS, ES2022 target
 ├── staticwebapp.config.json            # SPA fallback rewrite → index.html
 ├── package.json
-├── .env.example                        # VITE_GITHUB_CLIENT_ID
+├── .env.example                        # VITE_APP_ID
 ├── .github/workflows/                  # Azure SWA deploy on push main
 ├── public/
 │   ├── favicon/                        # PWA favicon assets
 │   └── images/                         # SVGs + WebPs (logo, icons, etc.)
 └── src/
-    ├── main.ts                         # App bootstrap (Vue + Vuex + Router)
+    ├── main.ts                         # App bootstrap (Vue + Pinia + Router)
     ├── App.vue                         # Root component (Header + RouterView)
     ├── router.ts                       # Routes: / → /home, /auth, /home, /:snippetId, /new
     ├── style.css                       # Global styles, dark/light mode
     ├── vite-env.d.ts
     ├── constants/
     │   ├── constants.ts                # EMBED_EDITOR URL, BUG_REPORT_URL, TAGS_COLORS
-    │   └── endpoints.ts                # API_URL, GITHUB_AUTH_URL, GITHUB_REDIRECT_URL
+    │   └── endpoints.ts                # API_URL, SNIPPET_VAULT_URL, LOGIN_URL, SESSION_URL, APP_ID
     ├── interfaces/
     │   ├── snippet.interface.ts        # Snippet type
     │   └── user.interface.ts           # User type
-    ├── lib/
-    │   └── store.ts                    # Vuex store (user, snippets, allSnippets)
+    ├── stores/
+    │   ├── user.store.ts               # Pinia store (user state)
+    │   └── snippets.store.ts           # Pinia store (snippets state)
     ├── services/
-    │   ├── auth.service.ts             # POST /auth?code= → setUser
-    │   ├── snippets.service.ts         # GET /all, getSnippetsMock()
-    │   └── mock-api/
-    │       └── snippets.json           # 6 mock snippets (dev only, unused in prod)
+    │   ├── auth.service.ts             # login() + getSession() para Geduma Auth
+    │   └── snippets.service.ts         # CRUD contra /snippet-vault/
     └── components/
         ├── Header.component.vue        # Nav: logo, back/create/bug/sign-in/sign-out, avatar
         ├── Auth.component.vue          # OAuth callback, stores session in localStorage
@@ -95,8 +94,8 @@ snippet-vault/
 - `store.state.user` — current authenticated user (empty object `{}` when not logged in)
 - `store.state.allSnippets` — complete snippet list (never mutated after load)
 - `store.state.snippets` — filtered snippet list (updated by search)
-- Mutations: `setUser`, `cleanUser`, `setSnippets`, `cleanSnippets`, `setAllSnippets`, `cleanAllSnippets`
-- Actions mirror mutations (e.g., `store.dispatch('setUser', user)`)
+- Actions: `setUser`, `cleanUser`, `setSnippets`, `cleanSnippets`, `setAllSnippets`, `cleanAllSnippets`
+- Access via Pinia `useXxxStore()` composables (e.g., `useUserStore().setUser(user)`)
 
 ### Styling
 - Global styles in `src/style.css` (dark/light via `prefers-color-scheme`)
@@ -106,19 +105,20 @@ snippet-vault/
 - Buttons: rounded corners (`.5rem`), hover scale (1.1), active opacity (0.6)
 
 ### Authentication
+- Login via Geduma Auth: `POST /auth/login/{appId}/prov_github` → redirect to GitHub → callback with `session_token`
+- Session fetched via `GET /auth/session/{sessionToken}` (single-use, expires in 15 min)
 - Session stored as `localStorage.setItem('snippet-vault-session', btoa(JSON.stringify(user)))`
 - Restored in Home component: `JSON.parse(atob(localStorage.getItem('snippet-vault-session')))`
-- Sign-out: `store.dispatch('cleanUser')` + `localStorage.clear()`
+- Sign-out: `useUserStore().cleanUser()` + `localStorage.clear()`
+- Avatars generated via DiceBear Pixel Art: `https://api.dicebear.com/7.x/pixel-art/svg?seed={email}`
 
 ### Known Issues / Technical Debt
 1. Create button is hardcoded disabled (has both `class="disabled"` and `disabled` attr)
 2. Snippet detail uses `window.location.pathname` instead of vue-router route params
-3. `getSnippetsMock()` exported but unused in production
-4. No error handling for API failures
-5. No loading states on Snippet detail page
-6. Search has no debounce/throttle
-7. `noImplicitAny: false` in tsconfig disables strict type checking
-8. No tests exist
+3. No error handling for API failures
+4. No loading states on Snippet detail page
+5. Search has no debounce/throttle
+6. `noImplicitAny: false` in tsconfig disables strict type checking
 
 ---
 
@@ -128,6 +128,7 @@ snippet-vault/
 npm run dev       # Start Vite dev server (hot reload)
 npm run build     # vue-tsc type check + vite build → dist/
 npm run preview   # Preview production build locally
+npm run test      # Run Vitest tests
 ```
 
 ---
@@ -136,7 +137,7 @@ npm run preview   # Preview production build locally
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `VITE_GITHUB_CLIENT_ID` | Yes | GitHub OAuth App client ID |
+| `VITE_APP_ID` | Yes | Geduma Auth app ID (formato: `app_xxx`) |
 
 Create `.env` from `.env.example` and set the value.
 
@@ -148,7 +149,7 @@ Create `.env` from `.env.example` and set the value.
 - **Workflow:** `.github/workflows/azure-static-web-apps-icy-river-034716410.yml`
 - **Azure resource:** `icy-river-034716410`
 - **Build output:** `dist/`
-- **Env vars passed as GitHub secrets:** `VITE_GITHUB_CLIENT_ID`
+- **Env vars passed as GitHub secrets:** `VITE_APP_ID`
 
 ---
 
@@ -164,13 +165,37 @@ Create `.env` from `.env.example` and set the value.
 
 ---
 
+## API Reference
+
+Base URL: `https://api.geduma.com/snippet-vault`
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | `/snippet-vault/` | No | Health check |
+| GET | `/snippet-vault/all` | No | List all snippets |
+| GET | `/snippet-vault/group/:group` | No | Filter by group |
+| GET | `/snippet-vault/:id` | No | Get by ID |
+| POST | `/snippet-vault` | No | Create `{ group, title, description, snippetValue, owner, tags? }` |
+| PUT | `/snippet-vault/:id` | No | Update snippet (supports owner) |
+| DELETE | `/snippet-vault/:id` | No | Delete snippet |
+
+Auth endpoints (Geduma Auth):
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/auth/providers/{appId}` | List enabled providers |
+| POST | `/auth/login/{appId}/{providerId}` | Init login, returns redirect URL |
+| GET | `/auth/session/{sessionToken}` | Get user session (single-use) |
+
+---
+
 ## External Services
 
 | Service | URL | Used For |
 |---------|-----|----------|
-| API | `https://api.geduma.com/snippet-vault` | Auth + snippet data |
+| API | `https://api.geduma.com` | Auth (geduma-auth) + snippet data (snippet-vault) |
 | Code Editor | `https://code.geduma.com/embed` | Embedded snippet viewer |
-| GitHub OAuth | `https://github.com/login/oauth/authorize` | Authentication |
+| GitHub OAuth | `https://github.com/login/oauth/authorize` | Authentication (via Geduma Auth) |
 | Bug Reports | `https://github.com/geduma/snippet-vault/issues/new/choose` | Bug reporting |
 
 ---
@@ -178,7 +203,7 @@ Create `.env` from `.env.example` and set the value.
 ## Coding Guidelines for AI
 
 1. **Component creation:** Name files `{Name}.component.vue`, use `<script setup lang="ts">`, add scoped styles
-2. **State access:** Import store directly (`import { store } from '../lib/store'`), dispatch actions, don't commit mutations directly
+2. **State access:** Import store directly (`import { useUserStore } from '../stores/user.store'`), call actions directly (e.g., `userStore.setUser(user)`)
 3. **Routing:** Use `<RouterLink>` for navigation links, `useRouter().push()` for programmatic navigation
 4. **API calls:** Add new functions to `src/services/`, follow existing fetch pattern
 5. **Types:** Add interfaces in `src/interfaces/`, export and import as needed

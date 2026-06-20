@@ -6,7 +6,7 @@ Snippet Vault is a web application for browsing, searching, and viewing code sni
 
 ### Domain
 **Production URL:** https://snippet.geduma.com  
-**API:** https://api.geduma.com/snippet-vault  
+**API:** https://api.geduma.com  
 **Code Editor:** https://code.geduma.com/embed
 
 ### Repository
@@ -27,7 +27,7 @@ https://github.com/geduma/snippet-vault
 | Persona | Description |
 |---------|-------------|
 | **Visitor** | Lands on the site, can browse and search snippets, no authentication required |
-| **Authenticated User** | Signs in via GitHub OAuth, same browsing experience, future ability to create snippets |
+| **Authenticated User** | Signs in via Geduma Auth (GitHub OAuth), same browsing experience, future ability to create snippets |
 | **Admin / Owner** | Manages the snippet database via the backend API |
 
 ---
@@ -41,7 +41,7 @@ https://github.com/geduma/snippet-vault
 | Browse snippets | 2-column grid of snippet cards with title, description, and tags | ✅ Done |
 | Search snippets | Real-time client-side filtering by title, description, or tag name | ✅ Done |
 | View snippet detail | Dedicated page showing full description, tags, and embedded code editor | ✅ Done |
-| GitHub OAuth | Sign-in via GitHub OAuth 2.0 flow | ✅ Done |
+| Geduma Auth | Sign-in via Geduma Auth (GitHub OAuth centralizado) | ✅ Done |
 | Session persistence | User session stored in localStorage as base64-encoded JSON | ✅ Done |
 | Responsive design | Grid collapses to single column on mobile | ✅ Done |
 | Dark/light mode | Respects OS color scheme preference | ✅ Done |
@@ -66,17 +66,18 @@ https://github.com/geduma/snippet-vault
 ### 5.1 Authentication Flow
 ```
 1. User clicks "Sign in" button in the header
-2. Redirected to GitHub OAuth (https://github.com/login/oauth/authorize)
-3. GitHub redirects back to /auth?code={code}
-4. Auth component exchanges code via API backend (/auth?code={code})
-5. User data stored in localStorage as btoa(JSON.stringify(user))
-6. Redirected to /home
+2. Frontend calls POST /auth/login/{appId}/prov_github → receives redirect URL
+3. User redirected to GitHub OAuth (https://github.com/login/oauth/authorize)
+4. GitHub redirects back to Geduma API → API redirects to /auth?session_token={uuid}
+5. Auth component reads session_token, calls GET /auth/session/{sessionToken}
+6. User data stored in localStorage as btoa(JSON.stringify(user))
+7. Redirected to /home
 ```
 
 ### 5.2 Browsing Flow
 ```
 1. User lands on /home
-2. SnippetsListComponent fetches all snippets from API (/all)
+2. SnippetsListComponent fetches all snippets from API (/snippet-vault/all)
 3. Snippets rendered as a 2-column card grid
 4. Each card shows title, description, and colored tags
 5. Clicking a card navigates to /:snippetId
@@ -85,16 +86,16 @@ https://github.com/geduma/snippet-vault
 ### 5.3 Search Flow
 ```
 1. User types in the search input
-2. On each keystroke, filterSnippet() runs
+2. On each keystroke (with 300ms debounce), filterSnippet() runs
 3. Filters allSnippets by title, description, or tag name (case-insensitive)
-4. Filtered results update the Vuex store and re-render the grid
+4. Filtered results update the Pinia store and re-render the grid
 ```
 
 ### 5.4 Snippet Detail Flow
 ```
 1. User clicks a snippet card
 2. Router navigates to /:snippetId
-3. Snippet looked up from Vuex store by _id
+3. Snippet looked up from Pinia store by _id
 4. Page renders title, description, colored tags
 5. Code editor embedded via <embed> pointing to code.geduma.com/embed/{snippetValue}
 6. Redirects to /home if no snippets loaded or ID not found
@@ -109,26 +110,29 @@ https://github.com/geduma/snippet-vault
 - **Language:** TypeScript
 - **Build Tool:** Vite 6
 - **Routing:** vue-router 4 (HTML5 history mode)
-- **State Management:** Vuex 4
+- **State Management:** Pinia 3
 - **Reactive Extensions:** RxJS 7
 - **Styling:** Plain CSS (no framework), Montserrat Alternates font
 
 ### 6.2 Backend (External)
-- **API Base URL:** `https://api.geduma.com/snippet-vault`
+- **API Base URL:** `https://api.geduma.com`
 - Endpoints used:
-  - `GET /auth?code={code}` — GitHub OAuth exchange
-  - `GET /all` — Fetch all snippets
+  - `POST /auth/login/{appId}/{providerId}` — Init login, returns redirect URL
+  - `GET /auth/session/{sessionToken}` — Get user session (single-use)
+  - `GET /snippet-vault/all` — Fetch all snippets
+  - `POST /snippet-vault` — Create snippet
+  - `DELETE /snippet-vault/:id` — Delete snippet
 - The frontend does NOT host any backend logic.
 
 ### 6.3 Infrastructure
 - **Hosting:** Azure Static Web Apps
 - **CI/CD:** GitHub Actions (push to `main` triggers build + deploy)
-- **Auth:** GitHub OAuth via `better-auth` library
+- **Auth:** Geduma Auth (OAuth centralizado, GitHub provider)
 
 ### 6.4 External Dependencies
 | Service | URL | Purpose |
 |---------|-----|---------|
-| GitHub OAuth | github.com | Authentication |
+| Geduma Auth | api.geduma.com | Authentication (GitHub OAuth centralizado) |
 | Code Editor | code.geduma.com | Embedded snippet viewer |
 | Google Fonts | fonts.googleapis.com | Montserrat Alternates font |
 
@@ -157,10 +161,10 @@ interface Tag {
 ### User
 ```typescript
 interface User {
-  id: number
+  id: string
   email: string
-  login: string
-  avatarUrl: string
+  displayName: string
+  avatarUrl: string        // Generated via DiceBear Pixel Art
 }
 ```
 
@@ -175,7 +179,7 @@ interface User {
 | Accessibility | Basic semantic HTML, no ARIA attributes |
 | SEO | SPA with no SSR; relies entirely on client-side rendering |
 | Browser support | Modern browsers (ES2022+), no IE support |
-| Security | OAuth via GitHub, no tokens stored in code; session in localStorage |
+| Security | OAuth via Geduma Auth, single-use session tokens (15 min TTL); session stored in localStorage |
 | Offline support | None currently |
 
 ---
@@ -186,10 +190,8 @@ interface User {
 2. **No error boundaries** — API failures cause unhandled errors
 3. **No loading states** for snippet detail page (Snippet component assumes data exists)
 4. **Search has no debounce** — filters on every keystroke
-5. **Mock data** exists (`getSnippetsMock`) but is unused in production
-6. **Snippet detail** uses `window.location.pathname` instead of router params
-7. **No tests** of any kind
-8. **No pagination** — all snippets loaded at once
+5. **Snippet detail** uses `window.location.pathname` instead of router params
+6. **No pagination** — all snippets loaded at once
 
 ---
 
@@ -202,9 +204,8 @@ interface User {
 5. Add user-specific snippet management
 6. Add pagination or infinite scroll
 7. Add debounce to search input
-8. Add unit and integration tests
-9. Add PWA support (service worker, manifest)
-10. Accessibility improvements
+8. Add PWA support (service worker, manifest)
+9. Accessibility improvements
 
 ---
 
