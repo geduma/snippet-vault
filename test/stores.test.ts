@@ -12,17 +12,17 @@ describe('UserStore', () => {
 
   it('sets user correctly', () => {
     const store = useUserStore()
-    const user: User = { id: 1, email: 'test@test.com', login: 'testuser', avatarUrl: 'avatar.jpg' }
+    const user: User = { id: '12345', email: 'test@test.com', displayName: 'Test User', avatarUrl: 'avatar.jpg' }
     store.setUser(user)
     expect(store.user).toEqual(user)
   })
 
   it('cleans user correctly', () => {
     const store = useUserStore()
-    store.setUser({ id: 1, email: 'test@test.com', login: 'testuser', avatarUrl: 'avatar.jpg' })
+    store.setUser({ id: '12345', email: 'test@test.com', displayName: 'Test User', avatarUrl: 'avatar.jpg' })
     store.cleanUser()
-    expect(store.user.id).toBe(0)
-    expect(store.user.login).toBe('')
+    expect(store.user.id).toBe('')
+    expect(store.user.displayName).toBe('')
   })
 })
 
