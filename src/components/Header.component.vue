@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Endpoints } from '../constants/endpoints'
 import type { User } from '../interfaces/user.interface'
 import { Constants } from '../constants/constants'
 import { useUserStore } from '../stores/user.store'
 import { useSnippetsStore } from '../stores/snippets.store'
 import { storeToRefs } from 'pinia'
+import { login } from '../services/auth.service'
+import { Endpoints } from '../constants/endpoints'
 
 const userStore = useUserStore()
 const snippetsStore = useSnippetsStore()
 const { loading } = storeToRefs(snippetsStore)
 
-const localUser = ref({ id: 0 } as User)
+const localUser = ref({ id: '' } as User)
 const userImg = ref('/batman-profile.webp')
 const storageUser = localStorage.getItem('snippet-vault-session')
 
@@ -23,14 +24,18 @@ const setUserData = (data: User) => {
 if (storageUser) setUserData(JSON.parse(atob(storageUser)))
 
 const signin = () => {
-  const clientID = import.meta.env.VITE_GITHUB_CLIENT_ID
-  const redirectURI = Endpoints.GITHUB_REDIRECT_URL
-  window.location.href = `${Endpoints.GITHUB_AUTH_URL}?client_id=${clientID}&redirect_uri=${redirectURI}`
+  login(Endpoints.APP_ID, 'prov_github')
+    .then(redirectUrl => {
+      window.location.href = redirectUrl
+    })
+    .catch(err => {
+      console.error('Login failed:', err)
+    })
 }
 
 const signout = () => {
   userStore.cleanUser()
-  localUser.value = { id: 0 } as User
+  localUser.value = { id: '' } as User
   localStorage.clear()
 }
 
@@ -43,7 +48,7 @@ userStore.$subscribe((_mutation, state) => {
 })
 </script>
 
-<template> 
+<template>
   <div class="header">
     <div class="logo">
       <img src="/images/snippet-vault-logo-icon.webp" alt="Snippet Vault logo" />
@@ -55,7 +60,7 @@ userStore.$subscribe((_mutation, state) => {
           <img src="/images/back.svg" alt="Back logo" />
           Back
         </button>
-        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id !== 0" :disabled="loading" :class="{ loading }">
+        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id" :disabled="loading" :class="{ loading }">
           <img src="/images/create.svg" alt="Create logo" />
           Create
         </button>
@@ -63,16 +68,16 @@ userStore.$subscribe((_mutation, state) => {
           <img src="/images/bug.svg" alt="Bug logo" />
           Bugs
         </button>
-        <button type="button" v-on:click="signin()" v-if="localUser.id === 0" :disabled="loading" :class="{ loading }">
+        <button type="button" v-on:click="signin()" v-if="!localUser.id" :disabled="loading" :class="{ loading }">
           <img src="/images/github.svg" alt="GitHub logo" />
           Sign in
         </button>
-        <button type="button" v-on:click="signout()" v-if="localUser.id !== 0" :disabled="loading" :class="{ loading }">
+        <button type="button" v-on:click="signout()" v-if="localUser.id" :disabled="loading" :class="{ loading }">
           <img src="/images/signout.svg" alt="Sign out logo" />
           Sign out
         </button>
       </div>
-      <img v-bind:src="userImg" alt="Snippet Vault logo" v-if="localUser.id !== 0" />
+      <img v-bind:src="userImg" alt="Snippet Vault logo" v-if="localUser.id" />
     </div>
   </div>
 </template>

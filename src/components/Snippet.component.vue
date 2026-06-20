@@ -80,7 +80,7 @@ loadSnippet()
       <button
         type="button"
         class="delete-btn"
-        v-if="user.login && snippet.owner === user.login"
+        v-if="user.displayName && snippet.owner === user.displayName"
         @click="handleDelete"
         :disabled="deleting"
       >

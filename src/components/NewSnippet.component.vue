@@ -37,7 +37,7 @@ const handleSubmit = async () => {
       description: description.value,
       tags: tags.value,
       snippetValue: snippetValue.value,
-      owner: user.value.login
+      owner: user.value.displayName
     })
     router.push('/home')
   } catch (err: any) {

@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', {
       this.user = _user
     },
     cleanUser () {
-      this.user = { id: 0, avatarUrl: '', email: '', login: '' } as unknown as User
+      this.user = { id: '', avatarUrl: '', email: '', displayName: '' } as unknown as User
     }
   }
 })

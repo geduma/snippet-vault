@@ -1,6 +1,6 @@
 export const Endpoints = {
-  API_URL: 'https://api.geduma.com/snippet-vault',
-  GITHUB_AUTH_URL: 'https://github.com/login/oauth/authorize',
-  GITHUB_REDIRECT_URL: 'https://snippet.geduma.com/auth'
-  // GITHUB_REDIRECT_URL: 'http://localhost:5173/auth'
+  API_URL: 'https://api.geduma.com',
+  LOGIN_URL: '/auth/login/',
+  SESSION_URL: '/auth/session/',
+  APP_ID: import.meta.env.VITE_APP_ID
 }
