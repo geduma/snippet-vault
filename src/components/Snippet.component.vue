@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import SpinnerComponent from './shared/Spinner.component.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Constants } from '../constants/constants'
 import type { Snippet } from '../interfaces/snippet.interface'
@@ -12,12 +13,12 @@ const snippetsStore = useSnippetsStore()
 const userStore = useUserStore()
 const { snippets, allSnippets } = storeToRefs(snippetsStore)
 const { user } = storeToRefs(userStore)
-import SpinnerComponent from './shared/Spinner.component.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const loading = ref(true)
+const editorLoading = ref(true)
 const deleting = ref(false)
 const snippet = ref<Snippet | null>(null)
 const snippetId = route.params.snippetId as string
@@ -73,7 +74,7 @@ loadSnippet()
 </script>
 
 <template>
-  <SpinnerComponent v-if="loading" />
+  <SpinnerComponent :enabled="loading" />
   <div class="snippet-container" v-if="snippet">
     <div class="snippet-header">
       <h1>{{ snippet.title }}</h1>
@@ -92,7 +93,10 @@ loadSnippet()
       <span class="tag" v-for="tag in snippet._tags" :key="tag.name" :style="`background-color: ${tag.color}`">{{ tag.name }}</span>
     </div>
     <div class="editor-container">
-      <embed class="editor" :src="`${Constants.EMBED_EDITOR}/${snippet.snippetValue}`" type="text/html">
+      <div class="editor-spinner" v-if="editorLoading">
+        <SpinnerComponent :enabled="true" />
+      </div>
+      <embed class="editor" :src="`${Constants.EMBED_EDITOR}/${snippet.snippetValue}`" type="text/html" @load="editorLoading = false">
     </div>
   </div>
 </template>
@@ -151,6 +155,22 @@ h1, p {
 .editor {
   width: 100%;
   height: 600px;
+  display: block;
+}
+
+.editor-container {
+  position: relative;
   margin: 1rem -.5rem;
+}
+
+.editor-spinner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  height: 600px;
+}
+
+.editor-spinner :deep(.bg-loader) {
+  background: #000;
 }
 </style>

@@ -60,7 +60,7 @@ userStore.$subscribe((_mutation, state) => {
           <img src="/images/back.svg" alt="Back logo" />
           Back
         </button>
-        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path !== '/new' && localUser.id" :disabled="loading" :class="{ loading }">
+        <button type="button" v-on:click="$router.push('/new')" v-if="$router.currentRoute.value.path === '/home' && localUser.id" :disabled="loading" :class="{ loading }">
           <img src="/images/create.svg" alt="Create logo" />
           Create
         </button>

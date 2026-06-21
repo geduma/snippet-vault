@@ -4,12 +4,9 @@ import { useVirtualizer } from '@tanstack/vue-virtual'
 import { useSnippetsStore } from '../stores/snippets.store'
 import { storeToRefs } from 'pinia'
 import type { Snippet } from '../interfaces/snippet.interface'
-import * as snippetsService from '../services/snippets.service'
-import SpinnerComponent from './shared/Spinner.component.vue'
-import { Constants } from '../constants/constants'
 
 const snippetsStore = useSnippetsStore()
-const { snippets: storeSnippets, loading } = storeToRefs(snippetsStore)
+const { snippets: storeSnippets } = storeToRefs(snippetsStore)
 
 const error = ref('')
 const snippets = ref<Snippet[]>([])
@@ -44,39 +41,15 @@ watch(() => rows.value.length, (newCount) => {
   })
 })
 
-snippetsService.getAllSnippets()
-  .then(data => {
-    const res = data.map(snippet => {
-      const tags = snippet.tags.split(',').map(tag => tag.trim())
-      return {
-        ...snippet,
-        _tags: tags.map(tag => ({
-          name: tag,
-          color: Constants.TAGS_COLORS.find(x => x.name === tag)?.color ?? '#999999B3'
-        }))
-      }
-    })
-    snippetsStore.setSnippets(res)
-    snippetsStore.setAllSnippets(res)
-    snippetsStore.setLoading(false)
-    snippets.value = res
-  })
-  .catch((err: { message: string }) => {
-    error.value = err.message || 'Failed to load snippets. Please try again later.'
-    snippetsStore.setLoading(false)
-  })
-
-  watch(storeSnippets, (newSnippets) => {
-      snippets.value = newSnippets
-    }
-  )
+watch(storeSnippets, (newSnippets) => {
+    snippets.value = newSnippets
+  }
+)
 </script>
 
 <template>
-  <SpinnerComponent v-if="loading" />
   <p class="error-message" v-if="error">{{ error }}</p>
-  <p class="empty-message" v-if="!loading && !error && snippets.length === 0">No snippets found matching your search.</p>
-  <div ref="parentRef" class="virtual-scroll-container" v-if="!error && !loading && snippets.length > 0">
+  <div ref="parentRef" class="virtual-scroll-container" v-if="!error && snippets.length > 0">
     <div :style="{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }">
       <div
         v-for="row in virtualizer.getVirtualItems()"
