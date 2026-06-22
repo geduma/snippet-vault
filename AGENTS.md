@@ -67,7 +67,7 @@ snippet-vault/
         ├── Search.component.vue        # Real-time client-side filter by title/desc/tags
         ├── SnippetsList.component.vue  # Fetches all snippets, renders 2-col card grid
         ├── Snippet.component.vue       # Detail view with embedded code editor
-        ├── NewSnippet.component.vue    # Placeholder (not implemented)
+        ├── NewSnippet.component.vue    # Create snippet form with embed editor
         └── shared/
             └── Spinner.component.vue   # Full-screen CSS loader overlay
 ```
@@ -161,7 +161,7 @@ Create `.env` from `.env.example` and set the value.
 | `/home` | HomeComponent | Main page (search + snippet grid) |
 | `/auth` | AuthComponent | OAuth callback |
 | `/:snippetId` | SnippetComponent | Snippet detail + embedded editor |
-| `/new` | NewSnippetComponent | Create snippet (placeholder) |
+| `/new` | NewSnippetComponent | Create snippet form with embed editor |
 
 ---
 
@@ -175,7 +175,7 @@ Base URL: `https://api.geduma.com/snippet-vault`
 | GET | `/snippet-vault/all` | No | List all snippets |
 | GET | `/snippet-vault/group/:group` | No | Filter by group |
 | GET | `/snippet-vault/:id` | No | Get by ID |
-| POST | `/snippet-vault` | No | Create `{ group, title, description, snippetValue, owner, tags? }` |
+| POST | `/snippet-vault` | No | Create `{ group?, title, description, snippetValue, owner, tags? }` |
 | PUT | `/snippet-vault/:id` | No | Update snippet (supports owner) |
 | DELETE | `/snippet-vault/:id` | No | Delete snippet |
 

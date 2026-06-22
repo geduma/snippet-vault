@@ -20,7 +20,7 @@ const getAllSnippets = (): Promise<Snippet[]> => {
     })
 }
 
-const createSnippet = (data: { group: string; title: string; description: string; tags: string; snippetValue: string; owner: string }): Promise<Snippet> => {
+const createSnippet = (data: { group?: string; title: string; description: string; tags: string; snippetValue: string; owner: string }): Promise<Snippet> => {
   return fetch(base, {
     method: 'POST',
     headers: {

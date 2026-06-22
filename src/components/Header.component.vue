@@ -11,6 +11,7 @@ import { Endpoints } from '../constants/endpoints'
 const userStore = useUserStore()
 const snippetsStore = useSnippetsStore()
 const { loading } = storeToRefs(snippetsStore)
+const authLoading = ref(false)
 
 const localUser = ref({ id: '' } as User)
 const userImg = ref('/batman-profile.webp')
@@ -24,12 +25,14 @@ const setUserData = (data: User) => {
 if (storageUser) setUserData(JSON.parse(atob(storageUser)))
 
 const signin = () => {
+  authLoading.value = true
   login(Endpoints.APP_ID, 'prov_github')
     .then(redirectUrl => {
       window.location.href = redirectUrl
     })
     .catch(err => {
       console.error('Login failed:', err)
+      authLoading.value = false
     })
 }
 
@@ -68,7 +71,7 @@ userStore.$subscribe((_mutation, state) => {
           <img src="/images/bug.svg" alt="Bug logo" />
           Bugs
         </button>
-        <button type="button" v-on:click="signin()" v-if="!localUser.id" :disabled="loading" :class="{ loading }">
+        <button type="button" v-on:click="signin()" v-if="!localUser.id" :disabled="authLoading" :class="{ loading: authLoading }">
           <img src="/images/github.svg" alt="GitHub logo" />
           Sign in
         </button>
