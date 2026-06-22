@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user.store'
 import { storeToRefs } from 'pinia'
 import { createSnippet } from '../services/snippets.service'
+import { Constants } from '../constants/constants'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -13,18 +14,45 @@ const title = ref('')
 const description = ref('')
 const tags = ref('')
 const snippetValue = ref('')
-const group = ref('0')
+const embedUrl = ref('')
 const submitting = ref(false)
 const error = ref('')
+const editorLoading = ref(true)
 
 if (!user.value.id) {
   router.push('/home')
 }
 
+const extractFromUrl = (url: string) => {
+  try {
+    const u = new URL(url)
+    if (u.pathname.startsWith('/embed/')) {
+      return u.pathname.replace('/embed/', '')
+    }
+    if (u.hash.startsWith('#/')) {
+      return u.hash.replace('#/', '')
+    }
+  } catch {}
+  return url
+}
+
+const onPasteUrl = () => {
+  snippetValue.value = extractFromUrl(embedUrl.value)
+}
+
 const handleSubmit = async () => {
-  if (!title.value || !description.value || !snippetValue.value) {
-    error.value = 'Title, description and snippet value are required'
+  if (!title.value || !description.value) {
+    error.value = 'Title and description are required'
     return
+  }
+
+  if (!embedUrl.value && !snippetValue.value) {
+    error.value = 'Please paste the embed URL from the code editor'
+    return
+  }
+
+  if (embedUrl.value && !snippetValue.value) {
+    snippetValue.value = extractFromUrl(embedUrl.value)
   }
 
   submitting.value = true
@@ -32,7 +60,6 @@ const handleSubmit = async () => {
 
   try {
     await createSnippet({
-      group: group.value,
       title: title.value,
       description: description.value,
       tags: tags.value,
@@ -64,12 +91,20 @@ const handleSubmit = async () => {
         <input id="tags" v-model="tags" type="text" placeholder="html, css, javascript" />
       </div>
       <div class="form-group">
-        <label for="group">Group</label>
-        <input id="group" v-model="group" type="number" placeholder="0" />
+        <label>Code</label>
+        <div class="editor-container">
+          <div class="editor-spinner" v-if="editorLoading">
+            <span class="loader"></span>
+          </div>
+          <embed class="editor" :src="Constants.EMBED_EDITOR" type="text/html" @load="editorLoading = false">
+        </div>
+        <p class="help-text">
+          Write your code in the editor above, then click "Copy URL" and paste it below
+        </p>
       </div>
       <div class="form-group">
-        <label for="snippetValue">Code</label>
-        <textarea id="snippetValue" v-model="snippetValue" placeholder="Paste your code here" rows="12"></textarea>
+        <label for="embedUrl">Embed URL</label>
+        <input id="embedUrl" v-model="embedUrl" type="url" placeholder="Paste the embed URL from the editor" @input="onPasteUrl" />
       </div>
       <p class="error" v-if="error">{{ error }}</p>
       <button type="submit" :disabled="submitting" :class="{ loading: submitting }">
@@ -106,7 +141,7 @@ label {
   opacity: .8;
 }
 
-input, textarea {
+input {
   padding: .5rem;
   border: 1px solid #ccc;
   border-radius: .5rem;
@@ -116,9 +151,44 @@ input, textarea {
   color: inherit;
 }
 
-textarea {
-  resize: vertical;
-  font-family: monospace;
+.editor {
+  width: 100%;
+  height: 400px;
+  display: block;
+}
+
+.editor-container {
+  position: relative;
+}
+
+.editor-spinner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e1e1e;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #444;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.help-text {
+  font-size: .8rem;
+  opacity: .6;
+  margin: .25rem 0 0 0;
 }
 
 .error {
