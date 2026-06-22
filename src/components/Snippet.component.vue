@@ -170,7 +170,5 @@ h1, p {
   height: 600px;
 }
 
-.editor-spinner :deep(.bg-loader) {
-  background: #000;
-}
+
 </style>
