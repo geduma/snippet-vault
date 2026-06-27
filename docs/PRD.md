@@ -68,7 +68,7 @@ https://github.com/geduma/snippet-vault
 1. User clicks "Sign in" button in the header
 2. Frontend calls POST /auth/login/{appId}/prov_github → receives redirect URL
 3. User redirected to GitHub OAuth (https://github.com/login/oauth/authorize)
-4. GitHub redirects back to Geduma API → API redirects to /auth?session_token={uuid}
+4. GitHub redirects back to Geduma API → API redirects to /auth#session_token={uuid}
 5. Auth component reads session_token, calls GET /auth/session/{sessionToken}
 6. User data stored in localStorage as btoa(JSON.stringify(user))
 7. Redirected to /home
