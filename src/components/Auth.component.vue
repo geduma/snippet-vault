@@ -4,7 +4,8 @@ import { useRouter } from 'vue-router'
 import SpinnerComponent from './shared/Spinner.component.vue'
 
 const router = useRouter()
-const urlParams = new URLSearchParams(window.location.search)
+const hash = window.location.hash.substring(1)
+const urlParams = new URLSearchParams(hash)
 const sessionToken = urlParams.get('session_token')
 
 if (sessionToken) {

@@ -105,7 +105,7 @@ snippet-vault/
 - Buttons: rounded corners (`.5rem`), hover scale (1.1), active opacity (0.6)
 
 ### Authentication
-- Login via Geduma Auth: `POST /auth/login/{appId}/prov_github` → redirect to GitHub → callback with `session_token`
+- Login via Geduma Auth: `POST /auth/login/{appId}/prov_github` → redirect to GitHub → callback with `session_token` (vía hash fragment)
 - Session fetched via `GET /auth/session/{sessionToken}` (single-use, expires in 15 min)
 - Session stored as `localStorage.setItem('snippet-vault-session', btoa(JSON.stringify(user)))`
 - Restored in Home component: `JSON.parse(atob(localStorage.getItem('snippet-vault-session')))`
